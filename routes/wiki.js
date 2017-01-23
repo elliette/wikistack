@@ -4,40 +4,51 @@ var models = require('../models');
 var Page = models.Page;
 var User = models.User;
 
+
 router.get('/', function(req, res, next) {
-	res.redirect('/');
+  res.redirect('/');
+  //console.log("You've found wiki page")
+ // next();
 })
 
 router.post('/', function(req, res, next) {
-	console.log(req.body);
+  console.log(req.body);
 
-	var title = req.body.title;
-	var content = req.body.content;
-
-	// STUDENT ASSIGNMENT:
-  // add definitions for `title` and `content`
-
+  var title = req.body.title;
+  var content = req.body.content;
   var page = Page.build({
     title: title,
     content: content
   });
 
-   // STUDENT ASSIGNMENT:
-  // make sure we only redirect *after* our save is complete!
-  // note: `.save` returns a promise or it can take a callback.
-  page.save().then(function(){
-  	res.redirect('/');
+  page.save().then(function() {
+    res.redirect('/');
   });
-  // -> after save -> res.redirect('/');
-//});
-
-
 })
 
 router.get('/add', function(req, res, next) {
-    res.render('addpage')
+  res.render('addpage')
 })
 
+router.get('/:title', function(req, res, next) {
+      var urlTitle = req.params.title;
+      console.log(urlTitle); 
+
+      Page.findOne({
+        where: {
+          urlTitle: urlTitle
+        }
+      })
+      .then(function(foundPage) {
+        console.log(foundPage);
+        res.render('wikipage', {
+          title: title, 
+          content: content, 
+          status: status
+        })
+        }).catch(next)
+      });
 
 
-module.exports = router;
+
+      module.exports = router;

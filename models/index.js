@@ -35,11 +35,11 @@ var Page = db.define('page', {
 			return '/wiki/' + urlTitle;
 		}
 	},
-	// hooks: {
-	// 	beforeValidate: function(page, options) {
-	// 		page.urlTitle = generateUrl(page.title);
-	// 	}
-	// }
+	hooks: {
+		beforeValidate: function(page, options) {
+			page.urlTitle = generateUrl(page.title);
+		}
+	}
 }
 );
 
@@ -59,7 +59,7 @@ function generateUrl(title) {
   if (title) {
     const notWords = /\W/ig;
     const whitespace = /\s+/g;
-    return title.replace(notWords, '').replace(whitespace, '_');
+    return title.replace(whitespace, '_').replace(notWords, ''); 
   } else {
     return Math.random().toString(36).substring(2, 7);
   }
